@@ -74,15 +74,17 @@ public class ModFile {
 			final JsonObject fileObject = jsonObject.getAsJsonArray("files").get(0).getAsJsonObject();
 
 			final Set<ModId> dependencies = new HashSet<>();
-			jsonObject.getAsJsonArray("dependencies").forEach(dependency -> {
-				final JsonObject dependencyObject = dependency.getAsJsonObject();
-				if (dependencyObject.get("dependency_type").getAsString().equals("required")) {
-					final JsonElement dependencyElement = dependencyObject.get("project_id");
-					if (!dependencyElement.isJsonNull()) {
-						dependencies.add(new ModId(dependencyElement.getAsString(), ModProvider.MODRINTH));
+			if (jsonObject.has("dependencies")) {
+				jsonObject.getAsJsonArray("dependencies").forEach(dependency -> {
+					final JsonObject dependencyObject = dependency.getAsJsonObject();
+					if (dependencyObject.get("dependency_type").getAsString().equals("required")) {
+						final JsonElement dependencyElement = dependencyObject.get("project_id");
+						if (!dependencyElement.isJsonNull()) {
+							dependencies.add(new ModId(dependencyElement.getAsString(), ModProvider.MODRINTH));
+						}
 					}
-				}
-			});
+				});
+			}
 
 			final ReleaseStatus releaseStatus;
 			switch (jsonObject.get("version_type").getAsString()) {
