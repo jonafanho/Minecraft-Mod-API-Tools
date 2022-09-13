@@ -1,10 +1,12 @@
 plugins {
 	id "java"
+	id "maven-publish"
 }
 
-apply plugin: "maven-publish"
 group "minecraftapitools"
 version "0.0.1"
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -14,7 +16,10 @@ dependencies {
 	implementation "com.google.code.gson:gson:2.8.0"
 }
 
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-	options.release = 8
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+		}
+	}
 }
