@@ -39,4 +39,18 @@ public class Network {
 			}
 		}, requestProperties);
 	}
+
+	public static String urlBuilder(String url, String... parameters) {
+		boolean addedFirst = false;
+		final StringBuilder stringBuilder = new StringBuilder(url);
+		for (int i = 0; i < parameters.length / 2; i++) {
+			final String key = parameters[i * 2];
+			final String value = parameters[i * 2 + 1];
+			if (value != null) {
+				stringBuilder.append(addedFirst ? "&" : "?").append(key).append("=").append(value);
+				addedFirst = true;
+			}
+		}
+		return stringBuilder.toString();
+	}
 }
