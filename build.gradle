@@ -2,6 +2,7 @@ plugins {
 	id "java"
 }
 
+apply plugin: "maven-publish"
 group "minecraftapitools"
 version "0.0.1"
 
