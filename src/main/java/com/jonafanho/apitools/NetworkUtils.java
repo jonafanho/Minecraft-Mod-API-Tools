@@ -10,7 +10,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
-public interface NetworkUtil {
+public interface NetworkUtils {
 
 	static void openConnectionSafe(String url, Consumer<InputStream> callback, String... requestProperties) {
 		try {
