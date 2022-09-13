@@ -1,4 +1,4 @@
-package minecraft_mod_api_tools;
+package com.jonafanho.apitools;
 
 public enum ModLoader {
 

@@ -1,4 +1,4 @@
-package minecraft_mod_api_tools;
+package com.jonafanho.apitools;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -10,9 +10,9 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
-public class Network {
+public interface NetworkUtil {
 
-	public static void openConnectionSafe(String url, Consumer<InputStream> callback, String... requestProperties) {
+	static void openConnectionSafe(String url, Consumer<InputStream> callback, String... requestProperties) {
 		try {
 			final URLConnection urlConnection = new URL(url).openConnection();
 
@@ -30,7 +30,7 @@ public class Network {
 		}
 	}
 
-	public static void openConnectionSafeJson(String url, Consumer<JsonElement> callback, String... requestProperties) {
+	static void openConnectionSafeJson(String url, Consumer<JsonElement> callback, String... requestProperties) {
 		openConnectionSafe(url, inputStream -> {
 			try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
 				callback.accept(new JsonParser().parse(inputStreamReader));
@@ -40,7 +40,7 @@ public class Network {
 		}, requestProperties);
 	}
 
-	public static String urlBuilder(String url, String... parameters) {
+	static String urlBuilder(String url, String... parameters) {
 		boolean addedFirst = false;
 		final StringBuilder stringBuilder = new StringBuilder(url);
 		for (int i = 0; i < parameters.length / 2; i++) {

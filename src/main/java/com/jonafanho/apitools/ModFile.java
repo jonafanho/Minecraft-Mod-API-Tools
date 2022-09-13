@@ -1,4 +1,4 @@
-package minecraft_mod_api_tools;
+package com.jonafanho.apitools;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
