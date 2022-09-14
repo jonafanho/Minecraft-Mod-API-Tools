@@ -49,12 +49,14 @@ public class ModFile {
 			}
 
 			final Set<ModId> dependencies = new HashSet<>();
-			fileObject.getAsJsonArray("dependencies").forEach(dependency -> {
-				final JsonObject dependencyObject = dependency.getAsJsonObject();
-				if (dependencyObject.get("relationType").getAsInt() == 3) {
-					dependencies.add(new ModId(dependencyObject.get("modId").getAsString(), ModProvider.CURSE_FORGE));
-				}
-			});
+			if (fileObject.has("dependencies")) {
+				fileObject.getAsJsonArray("dependencies").forEach(dependency -> {
+					final JsonObject dependencyObject = dependency.getAsJsonObject();
+					if (dependencyObject.get("relationType").getAsInt() == 3) {
+						dependencies.add(new ModId(dependencyObject.get("modId").getAsString(), ModProvider.CURSE_FORGE));
+					}
+				});
+			}
 
 			getModFile.accept(new ModFile(
 					fileName,

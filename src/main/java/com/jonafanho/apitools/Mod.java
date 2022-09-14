@@ -79,13 +79,15 @@ public class Mod implements Comparable<Mod> {
 			final Mod mod = new Mod(
 					modObject.get("name").getAsString(),
 					modObject.get("summary").getAsString(),
-					modObject.getAsJsonObject("logo").get("url").getAsString(),
+					modObject.has("logo") && modObject.get("logo").isJsonObject() ? modObject.getAsJsonObject("logo").get("url").getAsString() : null,
 					modObject.get("downloadCount").getAsInt(),
 					ISO8601Utils.parse(modObject.get("dateCreated").getAsString(), new ParsePosition(0)),
 					ISO8601Utils.parse(modObject.get("dateModified").getAsString(), new ParsePosition(0))
 			);
 			mod.modIds.add(new ModId(modObject.get("id").getAsString(), ModProvider.CURSE_FORGE));
-			modObject.getAsJsonArray("authors").forEach(authorElement -> mod.authors.add(authorElement.getAsJsonObject().get("name").getAsString()));
+			if (modObject.has("authors") && modObject.get("authors").isJsonArray()) {
+				modObject.getAsJsonArray("authors").forEach(authorElement -> mod.authors.add(authorElement.getAsJsonObject().get("name").getAsString()));
+			}
 			return mod;
 		} catch (Exception e) {
 			e.printStackTrace();
