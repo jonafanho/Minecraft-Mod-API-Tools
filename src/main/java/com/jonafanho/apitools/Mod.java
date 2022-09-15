@@ -3,6 +3,7 @@ package com.jonafanho.apitools;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
+import java.net.URL;
 import java.text.ParsePosition;
 import java.util.*;
 
@@ -72,6 +73,30 @@ public class Mod implements Comparable<Mod> {
 
 		Collections.sort(mods);
 		return mods;
+	}
+
+	public static Mod getModFromUrl(String urlString, String curseForgeKey) {
+		final Mod[] mod = {null};
+
+		try {
+			final URL url = new URL(urlString);
+			final String[] pathSplit = url.getPath().split("/");
+
+			if (ModProvider.CURSE_FORGE.hostMatches(url)) {
+				NetworkUtils.openConnectionSafeJson(NetworkUtils.urlBuilder(
+						"https://api.curseforge.com/v1/mods/search",
+						"gameId", "432",
+						"classId", "6",
+						"slug", pathSplit[3]
+				), jsonElement -> jsonElement.getAsJsonObject().getAsJsonArray("data").forEach(modElement -> mod[0] = fromCurseForge(modElement.getAsJsonObject())), "x-api-key", curseForgeKey);
+			} else if (ModProvider.MODRINTH.hostMatches(url)) {
+				NetworkUtils.openConnectionSafeJson(String.format("https://api.modrinth.com/v2/project/%s", pathSplit[2]), jsonElement -> mod[0] = fromModrinth(jsonElement.getAsJsonObject()));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return mod[0];
 	}
 
 	protected static Mod fromCurseForge(JsonObject modObject) {
