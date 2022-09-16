@@ -80,9 +80,14 @@ public class ModFile {
 				jsonObject.getAsJsonArray("dependencies").forEach(dependency -> {
 					final JsonObject dependencyObject = dependency.getAsJsonObject();
 					if (dependencyObject.get("dependency_type").getAsString().equals("required")) {
-						final JsonElement dependencyElement = dependencyObject.get("project_id");
-						if (!dependencyElement.isJsonNull()) {
-							dependencies.add(new ModId(dependencyElement.getAsString(), ModProvider.MODRINTH));
+						final JsonElement dependencyProjectIdElement = dependencyObject.get("project_id");
+						if (dependencyProjectIdElement.isJsonNull()) {
+							final JsonElement dependencyVersionIdElement = dependencyObject.get("version_id");
+							if (!dependencyVersionIdElement.isJsonNull()) {
+								NetworkUtils.openConnectionSafeJson(String.format("https://api.modrinth.com/v2/version/%s", dependencyVersionIdElement.getAsString()), jsonElement -> dependencies.add(new ModId(jsonElement.getAsJsonObject().get("project_id").getAsString(), ModProvider.MODRINTH)));
+							}
+						} else {
+							dependencies.add(new ModId(dependencyProjectIdElement.getAsString(), ModProvider.MODRINTH));
 						}
 					}
 				});
