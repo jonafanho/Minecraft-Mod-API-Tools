@@ -129,7 +129,7 @@ public class ModId {
 
 				final JsonObject modrinthResponseObject = ApacheNetworkUtils.send("https://api.modrinth.com/v2/version", "data", dataObject, inputStream, fileName, "Authorization", apiKey);
 				System.out.println(modrinthResponseObject);
-				return modrinthResponseObject.has("error");
+				return !modrinthResponseObject.has("error");
 			default:
 				return false;
 		}
