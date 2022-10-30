@@ -95,7 +95,7 @@ public class ModId {
 				dataObject.addProperty("releaseType", releaseStatus.toString().toLowerCase());
 				dataObject.add("relations", dependencyObject);
 
-				final JsonObject curseForgeResponseObject = ApacheNetworkUtils.send("https://minecraft.curseforge.com/api/projects/266707/upload-file?token=" + apiKey, "metadata", dataObject, inputStream, fileName);
+				final JsonObject curseForgeResponseObject = ApacheNetworkUtils.send(String.format("https://minecraft.curseforge.com/api/projects/%s/upload-file?token=%s", modId, apiKey), "metadata", dataObject, inputStream, fileName);
 				System.out.println(curseForgeResponseObject);
 				return curseForgeResponseObject.has("id");
 			case MODRINTH:
